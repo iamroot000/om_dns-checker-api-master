@@ -1,0 +1,106 @@
+from nslookup import Nslookup
+
+import sys, json, pprint, time, random
+
+
+
+
+
+class nsCheck(object):
+
+        """docstring for nsCheck"""
+
+
+
+        def get_info(self,domains):
+
+                # dns_server = ["180.76.76.76", "114.114.114.119", "114.114.114.114", "114.114.115.115", "114.114.114.110", "114.114.115.110", "202.46.34.76", "202.46.32.187", "202.46.34.75", "223.5.5.5", "223.6.6.6", "202.46.34.74"]
+
+                dns_server = ["180.76.76.76"]
+
+                rval = []
+
+                rancho = [random.choice(dns_server)]
+
+                # dns_query = Nslookup(dns_servers=rancho)
+
+                dns_query = Nslookup(dns_servers=rancho)
+
+                ips_record = dns_query.dns_lookup(domains)
+
+                ip = ips_record.answer
+
+
+
+                data ={
+
+                        'ip': ip,
+
+                        'nameserver': rancho
+
+                }
+
+                count = 0
+
+                while count <= 100 :
+
+                        rancho = [random.choice(dns_server)]
+
+                        # time.sleep(3)
+
+                        data = {
+
+                                'ip': ip,
+
+                                'nameserver': rancho
+
+                        }
+
+                        dns_query = Nslookup(dns_servers=rancho)
+
+                        ips_record = dns_query.dns_lookup(domains)
+
+                        ip = ips_record.answer
+
+                        print(str(len(ip)) + " my length")
+                        print(data)
+
+                        time.sleep(3)
+
+                        if len(ip) == 0:
+
+
+
+                                count  = count + 1
+
+                                print(str(count) + " my count")
+
+                        else:
+
+                                data = {
+
+                                        'ip': ip,
+
+                                        'nameserver': rancho
+
+                                }
+
+                                print(str(count) + " my count")
+                                print(data)
+                                return data
+
+
+
+                return data
+
+
+
+if __name__=="__main__":
+
+        domains = 'jiab888.net'
+
+        g = nsCheck()
+
+        print(g.get_info(domains))
+
+
